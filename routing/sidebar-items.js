@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Action",""],["RoutingError",""]],"mod":[["routing_client",""],["routing_table",""],["types",""]],"trait":[["Facade",""]]});

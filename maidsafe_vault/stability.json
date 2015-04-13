@@ -1,0 +1,1 @@
+{"name":"maidsafe_vault","counts":{"deprecated":0,"unstable":0,"stable":0,"unmarked":25},"submodules":[{"name":"chunk_store","counts":{"deprecated":0,"unstable":0,"stable":0,"unmarked":14},"submodules":[]},{"name":"vault","counts":{"deprecated":0,"unstable":0,"stable":0,"unmarked":5},"submodules":[]}]}

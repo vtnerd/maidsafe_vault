@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Cursor","The database cursor."]],"fn":[["cursor_with_statement",""]]});
