@@ -24,6 +24,7 @@ use std::cmp;
 
 use self::routing::types::DhtId;
 use self::routing::routing_table;
+use self::maidsafe_types::traits::RoutingTrait;
 
 use cbor::{ Decoder };
 
@@ -67,7 +68,7 @@ impl DataManager {
       _ => return Err(routing::RoutingError::InvalidRequest)
     }
 
-    let data_name = DhtId::new(name.get_id());
+    let data_name = DhtId::new(&name.get_id());
     if self.db_.exist(&data_name) {
       return Err(routing::RoutingError::Success);
     }
@@ -95,21 +96,21 @@ mod test {
   extern crate routing;
   use super::*;
   use self::maidsafe_types::*;
-  use self::routing::types::*;
+  use self::maidsafe_types::traits::RoutingTrait;
+  use self::routing::types::{array_as_vector, DhtId};
   use self::routing::routing_table;
 
   #[test]
   fn handle_put_get() {
     let mut data_manager = DataManager::new();
-    let name = NameType([3u8; 64]);
     let value = routing::types::generate_random_vec_u8(1024);
-    let data = ImmutableData::new(name, value);
+    let data = ImmutableData::new(value);
     let payload = Payload::new(PayloadTypeTag::ImmutableData, &data);
     let mut encoder = cbor::Encoder::from_memory();
     let encode_result = encoder.encode(&[&payload]);
     assert_eq!(encode_result.is_ok(), true);
-    let mut nodes_in_table = vec![DhtId::new([1u8; 64]), DhtId::new([2u8; 64]), DhtId::new([3u8; 64]), DhtId::new([4u8; 64]),
-                                  DhtId::new([5u8; 64]), DhtId::new([6u8; 64]), DhtId::new([7u8; 64]), DhtId::new([8u8; 64])];
+    let mut nodes_in_table = vec![DhtId::new(&[1u8; 64]), DhtId::new(&[2u8; 64]), DhtId::new(&[3u8; 64]), DhtId::new(&[4u8; 64]),
+                                  DhtId::new(&[5u8; 64]), DhtId::new(&[6u8; 64]), DhtId::new(&[7u8; 64]), DhtId::new(&[8u8; 64])];
     let put_result = data_manager.handle_put(&array_as_vector(encoder.as_bytes()), &mut nodes_in_table);
     assert_eq!(put_result.is_err(), false);
     match put_result.ok().unwrap() {
@@ -123,7 +124,7 @@ mod test {
       routing::Action::Reply(x) => panic!("Unexpected"),
     }
 
-    let data_name = DhtId::new(data.get_name().get_id());
+    let data_name = DhtId::new(&data.get_name().get_id());
     let get_result = data_manager.handle_get(&data_name);
     assert_eq!(get_result.is_err(), false);
     match get_result.ok().unwrap() {

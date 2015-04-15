@@ -56,9 +56,8 @@ mod test {
   fn handle_put() {
     let mut pmid_manager = PmidManager::new();
     let dest = DestinationAddress { dest: DhtId::generate_random(), reply_to: None };
-    let name = NameType([3u8; 64]);
     let value = routing::types::generate_random_vec_u8(1024);
-    let data = ImmutableData::new(name, value);
+    let data = ImmutableData::new(value);
     let payload = Payload::new(PayloadTypeTag::ImmutableData, &data);
     let mut encoder = cbor::Encoder::from_memory();
     let encode_result = encoder.encode(&[&payload]);
